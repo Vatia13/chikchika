@@ -15,6 +15,7 @@ return new class () extends Migration {
     {
         Schema::create((new Tweet())->getTable(), function (Blueprint $table) {
             $table->id();
+            $table->unsignedBigInteger('tweet_id')->nullable();
             $table->unsignedBigInteger('user_id');
             $table->string('tweet', 140)->index();
             $table->softDeletes();

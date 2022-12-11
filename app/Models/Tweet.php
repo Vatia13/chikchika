@@ -21,6 +21,7 @@ class Tweet extends Model
      * @var array<int, string>
      */
     protected $fillable = [
+        'tweet_id',
         'user_id',
         'tweet'
     ];
@@ -59,6 +60,14 @@ class Tweet extends Model
                 $q->where('email', $email);
             });
         }
+    }
+
+    /**
+     * No replies
+     */
+    public function scopeNoReplies($query)
+    {
+        $query->where('tweet_id', null);
     }
 
     /**
@@ -112,7 +121,7 @@ class Tweet extends Model
      */
     public function replies()
     {
-        return $this->belongsToMany(Tweet::class, 'replies', 'tweet_id', 'reply_id');
+        return $this->hasMany(Tweet::class, 'tweet_id', 'id');
     }
 
     /**

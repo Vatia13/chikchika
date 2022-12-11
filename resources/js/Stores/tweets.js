@@ -8,6 +8,7 @@ export default defineStore("tweets", {
     state: () => ({
         tweets: {},
         tweet: {},
+        replies: {},
     }),
 
     actions: {
@@ -19,6 +20,23 @@ export default defineStore("tweets", {
             return new Promise((resolve, reject) => {
                 window.axios
                     .get("tweets", { params: payload })
+                    .then((response) => {
+                        resolve(response);
+                    })
+                    .catch((error) => reject(error));
+            });
+        },
+
+        /**
+         * Fetch replies from API request
+         * @returns
+         */
+        fetchReplies(payload) {
+            return new Promise((resolve, reject) => {
+                window.axios
+                    .get(`tweets/${payload.tweet_id}/replies`, {
+                        params: payload,
+                    })
                     .then((response) => {
                         resolve(response);
                     })
@@ -42,13 +60,43 @@ export default defineStore("tweets", {
         },
 
         /**
+         * Fetch single tweet
+         * @returns
+         */
+        fetchOne(payload) {
+            return new Promise((resolve, reject) => {
+                window.axios
+                    .get(`tweets/${payload.tweet_id}`)
+                    .then((response) => {
+                        resolve(response);
+                    })
+                    .catch((error) => reject(error));
+            });
+        },
+
+        /**
          * Create a tweet
          * @returns
          */
-        tweet(payload) {
+        makeTweet(payload) {
             return new Promise((resolve, reject) => {
                 window.axios
                     .post("tweets", payload)
+                    .then((response) => {
+                        resolve(response);
+                    })
+                    .catch((error) => reject(error));
+            });
+        },
+
+        /**
+         * Reply to a tweet
+         * @returns
+         */
+        reply(payload) {
+            return new Promise((resolve, reject) => {
+                window.axios
+                    .post(`tweets/${payload.id}/reply`, payload)
                     .then((response) => {
                         resolve(response);
                     })

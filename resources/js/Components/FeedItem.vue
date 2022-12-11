@@ -18,7 +18,7 @@
                     <div class="text-[15px] mb-4">
                         <div>
                             <Link
-                                :href="route('user.profile', item.user.email)"
+                                :href="route('profile.view', item.user.email)"
                             >
                                 <b class="text-black">{{ item.user.name }}</b>
                             </Link>
@@ -32,8 +32,13 @@
                         ></p>
                     </div>
                     <div class="flex space-x-4 items-center">
-                        <div class="flex items-end space-x-2">
-                            <CommentIcon class="w-4 cursor-pointer" />
+                        <div
+                            class="flex items-end space-x-2"
+                            v-if="!item?.tweet_id"
+                        >
+                            <Link :href="route('tweet.view', item.id)">
+                                <CommentIcon class="w-4 cursor-pointer" />
+                            </Link>
                             <span
                                 class="text-[#666666] text-sm"
                                 v-if="item.replies_count"
@@ -95,6 +100,8 @@ const tweetsStore = useTweetsStore();
 const userStore = useUserStore();
 const loading = ref(false);
 
+const emit = defineEmits(["delete"]);
+
 defineProps({
     item: {
         default: () => {},
@@ -128,11 +135,14 @@ const deleteTweet = (item) => {
     if (!loading.value) {
         loading.value = true;
         tweetsStore.delete({ id: item.id }).then(() => {
-            tweetsStore.tweets.data = tweetsStore.tweets.data.filter(
-                (tweet) => tweet.id != item.id
-            );
+            if (tweetsStore.tweets?.data?.length) {
+                tweetsStore.tweets.data = tweetsStore.tweets.data.filter(
+                    (tweet) => tweet.id != item.id
+                );
+            }
         });
     }
+    emit("delete");
 };
 </script>
 <style>

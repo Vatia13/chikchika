@@ -1,6 +1,6 @@
 <template>
     <div class="w-full p-4">
-        <div class="flex space-x-4" v-if="userStore?.user?.id">
+        <div class="flex space-x-4" v-if="userStore?.user?.id && id">
             <Link :href="route('profile.view', userStore.user.email)">
                 <Avatar
                     :user="userStore.user"
@@ -13,7 +13,7 @@
                         class="absolute text-[#536471] text-lg"
                         v-if="showPlaceholder"
                     >
-                        What`s happening?
+                        Tweet your reply
                     </div>
                     <div
                         class="tweet-container"
@@ -38,7 +38,7 @@
                             :disabled="showPlaceholder"
                             @click="createTweet"
                         >
-                            Tweet
+                            Reply
                         </button>
                     </div>
                 </div>
@@ -58,6 +58,13 @@ const showPlaceholder = ref(true);
 const tweetContainerRef = ref(null);
 const errorMessage = ref(null);
 
+const props = defineProps({
+    id: {
+        default: null,
+        type: Number,
+    },
+});
+
 const onChange = (e) => {
     showPlaceholder.value = e.target.innerText.length > 0 ? false : true;
     tweetsStore.tweet.text = e.target.innerText;
@@ -69,7 +76,7 @@ const onChange = (e) => {
 const createTweet = (e) => {
     if (tweetsStore.tweet?.text) {
         tweetsStore
-            .makeTweet({ tweet: tweetsStore.tweet.text })
+            .reply({ id: props.id, tweet: tweetsStore.tweet.text })
             .then((response) => {
                 response.data.user = userStore.user;
                 tweetsStore.tweets.data.unshift(response.data);

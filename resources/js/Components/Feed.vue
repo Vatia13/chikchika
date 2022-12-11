@@ -6,7 +6,7 @@
             </div>
             <div
                 class="flex justify-center py-8 text-blue-600"
-                v-if="showLoadMore"
+                v-if="showLoadMore && isLoadMore"
             >
                 <button @click="fetchTweets">Load More</button>
             </div>
@@ -17,6 +17,13 @@
 import { computed } from "vue";
 import useTweetsStore from "@/Stores/tweets";
 const tweetsStore = useTweetsStore();
+
+const props = defineProps({
+    isLoadMore: {
+        default: true,
+        type: Boolean,
+    },
+});
 
 const showLoadMore = computed(() => {
     return tweetsStore.tweets?.last_page > tweetsStore.tweets?.current_page;

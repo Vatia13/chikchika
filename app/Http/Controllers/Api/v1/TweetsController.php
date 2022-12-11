@@ -18,6 +18,7 @@ class TweetsController extends Controller
     public function feed(Tweet $tweet, $email = null)
     {
         return $tweet->availableFeed($email)
+                    ->noReplies()
                     ->userFeed($email)
                     ->with('user')
                     ->withCount('likes')
@@ -32,7 +33,12 @@ class TweetsController extends Controller
      */
     public function tweet(Tweet $tweet, $tweet_id)
     {
-        return $tweet->with(['replies'])->find($tweet_id);
+        return $tweet->availableFeed()
+                     ->with('user')
+                     ->withCount('likes')
+                     ->withCount('replies')
+                     ->isLikedByMe()
+                     ->find($tweet_id);
     }
 
     /**
@@ -48,15 +54,21 @@ class TweetsController extends Controller
      */
     public function replies(Tweet $tweet, $tweet_id)
     {
-        return $tweet->with(['replies'])->find($tweet_id)->replies ?? [];
+        return $tweet
+        ->where('tweet_id', $tweet_id)
+        ->with('user')
+        ->withCount('likes')
+        ->isLikedByMe()
+        ->latest()
+        ->paginate();
     }
 
     /**
      * reply to tweet
      */
-    public function reply(Tweet $tweet, $tweet_id)
+    public function reply(TweetRequest $request, Tweet $tweet, $tweet_id)
     {
-        return ['reply'];
+        return $tweet->find($tweet_id)->replies()->create($request->validated());
     }
 
     /**
