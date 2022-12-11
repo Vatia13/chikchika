@@ -45,7 +45,6 @@ class Tweet extends Model
                     $q->where('follower_user_id', Auth::id());
                 })->orWhere('is_public', 1)->orWhere('id', Auth::id());
             }
-
             return $userQuery->where('is_public', 1);
         });
     }

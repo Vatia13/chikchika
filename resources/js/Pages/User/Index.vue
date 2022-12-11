@@ -1,7 +1,7 @@
 <template>
     <div v-if="user">
         <Head title="User feed" />
-        <AuthenticatedLayout>
+        <GuestLayout>
             <template #header>
                 <div class="flex justify-between">
                     <div>
@@ -57,14 +57,15 @@
                     />
                 </Feed>
             </div>
-        </AuthenticatedLayout>
+        </GuestLayout>
     </div>
 </template>
 <script setup>
 import { onMounted, ref } from "vue";
 
-import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout.vue";
+import GuestLayout from "@/Layouts/GuestLayout.vue";
 import { Head } from "@inertiajs/inertia-vue3";
+import { Inertia } from "@inertiajs/inertia";
 import Tweet from "@/Components/Tweet.vue";
 import Feed from "@/Components/Feed.vue";
 import FeedItem from "@/Components/FeedItem.vue";
@@ -92,6 +93,10 @@ const fetchUserProfile = () => {
 };
 
 const toggleUserFollow = (e) => {
+    if (!userStore.user?.id) {
+        Inertia.visit("login");
+        return;
+    }
     if (user.value.is_followed_by_me) {
         user.value.is_followed_by_me = 0;
         tweetsStore.tweets = {};

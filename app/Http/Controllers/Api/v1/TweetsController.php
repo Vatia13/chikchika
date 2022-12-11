@@ -76,10 +76,12 @@ class TweetsController extends Controller
     }
 
     /**
-     * delete tweet
+     * delete own tweet
      */
     public function delete(Tweet $tweet, $tweet_id)
     {
-        $tweet->find($tweet_id)->delete();
+        if (Auth::check()) {
+            $tweet->where('user_id', Auth::id())->find($tweet_id)->delete();
+        }
     }
 }

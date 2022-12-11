@@ -17,16 +17,17 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::prefix('v1')->group(function () {
-    Route::middleware('auth')->group(function () {
-        Route::name('user.')->controller(UserController::class)->group(function () {
+    Route::name('user.')->controller(UserController::class)->group(function () {
+        Route::get('/{email}/profile', 'profile')->name('profile');
+        Route::middleware('auth')->group(function () {
             Route::get('/me', 'me')->name('details');
-            Route::get('/{email}/profile', 'profile')->name('profile');
             Route::get('/following', 'following')->name('following');
             Route::get('/follows', 'followers')->name('followers');
             Route::post('/follow/{user_id}', 'follow')->name('follow');
             Route::delete('/unfollow/{user_id}', 'unfollow')->name('unfollow');
         });
     });
+
 
     Route::prefix('tweets')->name('tweets.')->controller(TweetsController::class)->group(function () {
         Route::get('/', 'feed')->name('feed');

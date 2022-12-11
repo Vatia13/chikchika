@@ -2,7 +2,7 @@
     <article class="border-b border-gray border-solid p-4">
         <div class="flex space-x-3 w-full">
             <div>
-                <Link :href="route('user.profile', item.user.email)">
+                <Link :href="route('profile.view', item.user.email)">
                     <Avatar
                         :user="item.user"
                         :color="

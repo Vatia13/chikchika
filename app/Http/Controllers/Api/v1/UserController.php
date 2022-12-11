@@ -22,7 +22,11 @@ class UserController extends Controller
      */
     public function profile(User $user, $email)
     {
-        return $user->withCount('followers')->withCount('following')->isFollowedByMe()->where('email', $email)->first();
+        return $user->withCount('followers')
+                    ->withCount('following')
+                    ->isFollowedByMe()
+                    ->where('email', $email)
+                    ->first();
     }
 
     /**
@@ -30,7 +34,9 @@ class UserController extends Controller
      */
     public function following(User $user)
     {
-        return $user->with(['following'])->findOrFail(Auth::user()->id)->following ?? [];
+        return $user->with(['following'])
+                    ->findOrFail(Auth::user()->id)
+                    ->following ?? [];
     }
 
     /**
@@ -38,7 +44,9 @@ class UserController extends Controller
      */
     public function followers(User $user)
     {
-        return $user->with(['followers'])->findOrFail(Auth::user()->id)->followers ?? [];
+        return $user->with(['followers'])
+                    ->findOrFail(Auth::user()->id)
+                    ->followers ?? [];
     }
 
     /**
@@ -46,8 +54,10 @@ class UserController extends Controller
      */
     public function follow(User $user, $user_id)
     {
-        if ($user_id != Auth::user()->id) {
-            $user->findOrFail(Auth::user()->id)->following()->attach($user_id);
+        if (Auth::check() && $user_id != Auth::id()) {
+            $user->findOrFail(Auth::id())
+                 ->following()
+                 ->attach($user_id);
         }
     }
 
@@ -56,8 +66,10 @@ class UserController extends Controller
      */
     public function unfollow(User $user, $user_id)
     {
-        if ($user_id != Auth::user()->id) {
-            $user->findOrFail(Auth::user()->id)->following()->detach($user_id);
+        if (Auth::check() && $user_id != Auth::id()) {
+            $user->findOrFail(Auth::id())
+                 ->following()
+                 ->detach($user_id);
         }
     }
 }
