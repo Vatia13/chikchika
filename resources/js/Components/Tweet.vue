@@ -1,7 +1,12 @@
 <template>
     <div class="w-full p-4">
-        <div class="flex space-x-4" v-if="userStore?.user">
-            <Avatar :user="userStore.user" color="bg-teal-200 text-teal-700" />
+        <div class="flex space-x-4" v-if="userStore?.user?.id">
+            <Link :href="route('profile.view', userStore.user.email)">
+                <Avatar
+                    :user="userStore.user"
+                    color="bg-teal-200 text-teal-700"
+                />
+            </Link>
             <div class="w-full">
                 <div class="items-center flex w-full">
                     <div
@@ -43,6 +48,7 @@
 </template>
 <script setup>
 import { ref } from "vue";
+import { Link } from "@inertiajs/inertia-vue3";
 import Avatar from "@/Components/Avatar.vue";
 import useUserStore from "@/Stores/user";
 import useTweetsStore from "@/Stores/tweets";

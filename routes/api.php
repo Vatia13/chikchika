@@ -31,13 +31,15 @@ Route::prefix('v1')->group(function () {
 
     Route::prefix('tweets')->name('tweets.')->controller(TweetsController::class)->group(function () {
         Route::get('/', 'feed')->name('feed');
-        Route::post('/', 'create')->name('create');
         Route::get('/{email}/feed', 'feed')->name('user_feed');
         Route::get('/{tweet_id}', 'tweet')->name('tweet');
         Route::get('/{tweet_id}/replies', 'replies')->name('replies');
-        Route::post('/{tweet_id}/like', 'like')->name('like');
-        Route::delete('/{tweet_id}/unlike', 'unlike')->name('unlike');
-        Route::delete('/{tweet_id}/delete', 'delete')->name('delete');
-        Route::post('/{tweet_id}/reply', 'reply')->name('reply');
+        Route::middleware('auth')->group(function () {
+            Route::post('/', 'create')->name('create');
+            Route::post('/{tweet_id}/like', 'like')->name('like');
+            Route::delete('/{tweet_id}/unlike', 'unlike')->name('unlike');
+            Route::delete('/{tweet_id}/delete', 'delete')->name('delete');
+            Route::post('/{tweet_id}/reply', 'reply')->name('reply');
+        });
     });
 });

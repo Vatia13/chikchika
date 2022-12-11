@@ -54,7 +54,7 @@ class UserController extends Controller
      */
     public function follow(User $user, $user_id)
     {
-        if (Auth::check() && $user_id != Auth::id()) {
+        if ($user_id != Auth::id()) {
             $user->findOrFail(Auth::id())
                  ->following()
                  ->attach($user_id);
@@ -66,7 +66,7 @@ class UserController extends Controller
      */
     public function unfollow(User $user, $user_id)
     {
-        if (Auth::check() && $user_id != Auth::id()) {
+        if ($user_id != Auth::id()) {
             $user->findOrFail(Auth::id())
                  ->following()
                  ->detach($user_id);

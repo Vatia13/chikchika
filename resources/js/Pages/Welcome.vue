@@ -35,11 +35,25 @@ defineProps({
 
 onMounted(() => {
     fetchTweets();
+    fetchLoggedInUser();
 });
 
 const fetchTweets = () => {
     tweetsStore.fetch().then((response) => {
         tweetsStore.tweets = response?.data;
     });
+};
+
+const fetchLoggedInUser = () => {
+    userStore
+        .me()
+        .then((response) => {
+            userStore.user = response?.data;
+            window.localStorage.setItem("user", userStore.user);
+        })
+        .catch((error) => {
+            userStore.user = {};
+            window.localStorage.removeItem("user");
+        });
 };
 </script>

@@ -80,8 +80,6 @@ class TweetsController extends Controller
      */
     public function delete(Tweet $tweet, $tweet_id)
     {
-        if (Auth::check()) {
-            $tweet->where('user_id', Auth::id())->find($tweet_id)->delete();
-        }
+        $tweet->where('user_id', Auth::id())->find($tweet_id)->delete();
     }
 }
