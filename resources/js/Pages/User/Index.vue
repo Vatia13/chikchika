@@ -1,7 +1,7 @@
 <template>
     <div v-if="user">
         <Head title="User feed" />
-        <GuestLayout>
+        <Component :is="userStore.user?.id ? AuthenticatedLayout : GuestLayout">
             <template #header>
                 <div class="flex justify-between">
                     <div>
@@ -50,6 +50,7 @@
                     >
                         This user profile is private, follow to see user feed
                     </div>
+                    <Tweet v-if="userStore.user?.id == user.id" />
                     <FeedItem
                         v-for="item in tweetsStore.tweets?.data"
                         :item="item"
@@ -57,13 +58,14 @@
                     />
                 </Feed>
             </div>
-        </GuestLayout>
+        </Component>
     </div>
 </template>
 <script setup>
 import { onMounted, ref } from "vue";
 
 import GuestLayout from "@/Layouts/GuestLayout.vue";
+import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout.vue";
 import { Head } from "@inertiajs/inertia-vue3";
 import { Inertia } from "@inertiajs/inertia";
 import Tweet from "@/Components/Tweet.vue";
@@ -78,6 +80,7 @@ const user = ref(null);
 onMounted(() => {
     fetchTweets();
     fetchUserProfile();
+    fetchLoggedInUser();
 });
 
 const fetchTweets = () => {
@@ -117,5 +120,18 @@ const toggleUserFollow = (e) => {
             fetchTweets();
         })
         .catch((error) => (user.value.is_followed_by_me = 0));
+};
+
+const fetchLoggedInUser = () => {
+    userStore
+        .me()
+        .then((response) => {
+            userStore.user = response?.data;
+            window.localStorage.setItem("user", userStore.user);
+        })
+        .catch((error) => {
+            userStore.user = {};
+            window.localStorage.removeItem("user");
+        });
 };
 </script>
