@@ -19,7 +19,15 @@ or simply use command:
 cp .env.example .env
 ```
 
-#### 3. Migrate database
+#### 3. Generate APP_KEY
+
+After copying .env you can setup database and mail credentials but also you have to generate an APP_KEY with command below:
+
+```bash
+php artisan key:generate
+```
+
+#### 4. Migrate database
 
 ```bash
 php artisan migrate
