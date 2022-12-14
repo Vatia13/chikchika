@@ -38,11 +38,6 @@ The optional command if u want to seed some factory data from seeders you can ru
 php artisan db:seed
 ```
 
-The optional command if u want to seed some factory data from seeders you can run 
-```bash
-php artisan db:seed
-```
-
 #### 5. Optional - Install npm packages
 
 In case if you want to track realtime changes in project install npm packages
