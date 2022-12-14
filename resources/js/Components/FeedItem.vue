@@ -2,7 +2,7 @@
     <article class="border-b border-gray border-solid p-4">
         <div class="flex space-x-3 w-full">
             <div>
-                <Link :href="route('profile.view', item.user.email)">
+                <Link :href="route('profile.view', item.user.username)">
                     <Avatar
                         :user="item.user"
                         :color="
@@ -18,7 +18,9 @@
                     <div class="text-[15px] mb-4">
                         <div>
                             <Link
-                                :href="route('profile.view', item.user.email)"
+                                :href="
+                                    route('profile.view', item.user.username)
+                                "
                             >
                                 <b class="text-black">{{ item.user.name }}</b>
                             </Link>

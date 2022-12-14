@@ -58,11 +58,3 @@ Route::middleware('auth')->group(function () {
     Route::post('logout', [AuthenticatedSessionController::class, 'destroy'])
                 ->name('logout');
 });
-
-Route::get('/{email}', function ($email) {
-    return Inertia::render('User/Index', ['email' => $email]);
-})->name('profile.view');
-
-Route::get('tweet/{tweet_id}', function ($tweet_id) {
-    return Inertia::render('Tweet', ['tweet_id' => $tweet_id]);
-})->name('tweet.view');

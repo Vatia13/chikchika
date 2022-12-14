@@ -13,13 +13,13 @@ class TweetsController extends Controller
     /**
      * returns the feed
      * in case of single user profile view
-     * we should receive user $email
+     * we should receive user $username
      */
-    public function feed(Tweet $tweet, $email = null)
+    public function feed(Tweet $tweet, $username = null)
     {
-        return $tweet->availableFeed($email)
+        return $tweet->availableFeed()
                     ->noReplies()
-                    ->userFeed($email)
+                    ->userFeed($username)
                     ->with('user')
                     ->withCount('likes')
                     ->withCount('replies')

@@ -53,11 +53,11 @@ class Tweet extends Model
     /**
      * Get single user feed data
      */
-    public function scopeUserFeed($query, $email)
+    public function scopeUserFeed($query, $username)
     {
-        if ($email) {
-            $query->whereHas('user', function ($q) use ($email) {
-                $q->where('email', $email);
+        if ($username) {
+            $query->whereHas('user', function ($q) use ($username) {
+                $q->where('username', $username);
             });
         }
     }
@@ -129,6 +129,6 @@ class Tweet extends Model
      */
     public function likes()
     {
-        return $this->belongsToMany(User::class, 'likes', 'tweet_id', 'user_id');
+        return $this->belongsToMany(User::class, 'likes', 'tweet_id', 'user_id')->using(TweetLike::class);
     }
 }

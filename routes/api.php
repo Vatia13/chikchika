@@ -1,9 +1,10 @@
 <?php
 
-use App\Http\Controllers\Api\v1\TweetsController;
-use App\Http\Controllers\Api\v1\UserController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\Api\v1\UserController;
+use App\Http\Controllers\Api\v1\TweetsController;
+use App\Http\Controllers\Api\v1\NotificationsController;
 
 /*
 |--------------------------------------------------------------------------
@@ -18,7 +19,7 @@ use Illuminate\Support\Facades\Route;
 
 Route::prefix('v1')->group(function () {
     Route::name('user.')->controller(UserController::class)->group(function () {
-        Route::get('/{email}/profile', 'profile')->name('profile');
+        Route::get('/{username}/profile', 'profile')->name('profile');
         Route::middleware('auth')->group(function () {
             Route::get('/me', 'me')->name('details');
             Route::get('/following', 'following')->name('following');
@@ -31,7 +32,7 @@ Route::prefix('v1')->group(function () {
 
     Route::prefix('tweets')->name('tweets.')->controller(TweetsController::class)->group(function () {
         Route::get('/', 'feed')->name('feed');
-        Route::get('/{email}/feed', 'feed')->name('user_feed');
+        Route::get('/{username}/feed', 'feed')->name('user_feed');
         Route::get('/{tweet_id}', 'tweet')->name('tweet');
         Route::get('/{tweet_id}/replies', 'replies')->name('replies');
         Route::middleware('auth')->group(function () {
@@ -41,5 +42,14 @@ Route::prefix('v1')->group(function () {
             Route::delete('/{tweet_id}/delete', 'delete')->name('delete');
             Route::post('/{tweet_id}/reply', 'reply')->name('reply');
         });
+    });
+
+    Route::middleware('auth')->prefix('notifications')
+    ->name('notifications.')
+    ->controller(NotificationsController::class)
+    ->group(function () {
+        Route::get('/', 'notifications')->name('all');
+        Route::get('/unread', 'unreadNotifications')->name('unread');
+        Route::post('/read', 'read')->name('read');
     });
 });

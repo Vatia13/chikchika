@@ -1,13 +1,20 @@
 <script setup>
-import { ref } from "vue";
+import { ref, onMounted } from "vue";
 import ApplicationLogo from "@/Components/ApplicationLogo.vue";
 import Dropdown from "@/Components/Dropdown.vue";
 import DropdownLink from "@/Components/DropdownLink.vue";
 import NavLink from "@/Components/NavLink.vue";
 import ResponsiveNavLink from "@/Components/ResponsiveNavLink.vue";
 import { Link } from "@inertiajs/inertia-vue3";
-
+import useNotificationsStore from "@/Stores/notifications";
+const notificationsStore = useNotificationsStore();
 const showingNavigationDropdown = ref(false);
+
+onMounted(() => {
+    notificationsStore.fetchUnread().then((response) => {
+        notificationsStore.countUnread = response?.data;
+    });
+});
 </script>
 
 <template>
@@ -72,6 +79,14 @@ const showingNavigationDropdown = ref(false);
                                     </template>
 
                                     <template #content>
+                                        <DropdownLink
+                                            :href="route('notifications.page')"
+                                        >
+                                            Notifications
+                                            <b>{{
+                                                notificationsStore.countUnread
+                                            }}</b>
+                                        </DropdownLink>
                                         <DropdownLink
                                             :href="route('profile.edit')"
                                         >
@@ -161,6 +176,12 @@ const showingNavigationDropdown = ref(false);
                         </div>
 
                         <div class="mt-3 space-y-1">
+                            <ResponsiveNavLink
+                                :href="route('notifications.page')"
+                            >
+                                Notifications
+                                <b>{{ notificationsStore.countUnread }}</b>
+                            </ResponsiveNavLink>
                             <ResponsiveNavLink :href="route('profile.edit')">
                                 Profile
                             </ResponsiveNavLink>

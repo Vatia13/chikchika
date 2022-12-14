@@ -1,7 +1,7 @@
 <template>
     <div class="w-full p-4">
         <div class="flex space-x-4" v-if="userStore?.user?.id">
-            <Link :href="route('profile.view', userStore.user.email)">
+            <Link :href="route('profile.view', userStore.user.username)">
                 <Avatar
                     :user="userStore.user"
                     color="bg-teal-200 text-teal-700"

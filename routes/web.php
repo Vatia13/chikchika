@@ -45,3 +45,17 @@ Route::middleware('auth')->group(function () {
 });
 
 require __DIR__.'/auth.php';
+
+
+
+Route::get('tweet/{tweet_id}', function ($tweet_id) {
+    return Inertia::render('Tweet', ['tweet_id' => $tweet_id]);
+})->name('tweet.view');
+
+Route::get('/notifications', function () {
+    return Inertia::render('Notifications');
+})->name('notifications.page');
+
+Route::get('/{email}', function ($email) {
+    return Inertia::render('User/Index', ['email' => $email]);
+})->name('profile.view');

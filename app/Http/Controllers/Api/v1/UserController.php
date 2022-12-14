@@ -20,12 +20,12 @@ class UserController extends Controller
     /**
      * User profile
      */
-    public function profile(User $user, $email)
+    public function profile(User $user, $username)
     {
         return $user->withCount('followers')
                     ->withCount('following')
                     ->isFollowedByMe()
-                    ->where('email', $email)
+                    ->where('username', $username)
                     ->first();
     }
 

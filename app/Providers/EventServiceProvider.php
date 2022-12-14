@@ -2,10 +2,16 @@
 
 namespace App\Providers;
 
+use App\Models\Tweet;
+use App\Models\TweetLike;
+use App\Models\UserFollow;
+use App\Observers\TweetObserver;
+use App\Observers\TweetLikeObserver;
+use App\Observers\UserFollowObserver;
+use Illuminate\Support\Facades\Event;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Auth\Listeners\SendEmailVerificationNotification;
 use Illuminate\Foundation\Support\Providers\EventServiceProvider as ServiceProvider;
-use Illuminate\Support\Facades\Event;
 
 class EventServiceProvider extends ServiceProvider
 {
@@ -27,7 +33,9 @@ class EventServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        //
+        UserFollow::observe(UserFollowObserver::class);
+        TweetLike::observe(TweetLikeObserver::class);
+        Tweet::observe(TweetObserver::class);
     }
 
     /**

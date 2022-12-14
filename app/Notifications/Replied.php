@@ -3,22 +3,30 @@
 namespace App\Notifications;
 
 use Illuminate\Bus\Queueable;
+use Illuminate\Support\Facades\URL;
+use Illuminate\Notifications\Notification;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
-use Illuminate\Notifications\Notification;
 
-class FollowingYou extends Notification implements ShouldQueue
+class Replied extends Notification implements ShouldQueue
 {
     use Queueable;
+
+
+    protected $message;
+    protected $reply;
+    protected $repliedTo;
 
     /**
      * Create a new notification instance.
      *
      * @return void
      */
-    public function __construct()
+    public function __construct($reply, $repliedTo)
     {
-        //
+        $this->reply = $reply;
+        $this->repliedTo = $repliedTo;
+        $this->message = $reply->user->username.' has replied to your tweet';
     }
 
     /**
@@ -29,7 +37,7 @@ class FollowingYou extends Notification implements ShouldQueue
      */
     public function via($notifiable)
     {
-        return ['mail'];
+        return ['mail','database'];
     }
 
     /**
@@ -41,21 +49,22 @@ class FollowingYou extends Notification implements ShouldQueue
     public function toMail($notifiable)
     {
         return (new MailMessage())
-                    ->line('The introduction to the notification.')
-                    ->action('Notification Action', url('/'))
-                    ->line('Thank you for using our application!');
+                    ->line($this->message)
+                    ->line("Reply: ". $this->reply->tweet)
+                    ->action('go to your tweet', URL::route('tweet.view', $this->repliedTo->id));
     }
 
     /**
      * Get the array representation of the notification.
      *
-     * @param  mixed  $notifiable
      * @return array
      */
-    public function toArray($notifiable)
+    public function toArray()
     {
         return [
-            //
+            'reply' => $this->reply->tweet,
+            'your_tweet' => $this->repliedTo->tweet,
+            'message' => $this->message
         ];
     }
 }
