@@ -33,7 +33,7 @@ class SendWeeklySummery extends Command
             foreach ($users as $user) {
                 $user->notify(new WeeklySummery($user));
             }
-            return false; //this is because I don't want to spam mail on test project =)
+            return false; //this is because of mail span on test project =)
         });
     }
 }
