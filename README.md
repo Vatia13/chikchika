@@ -30,7 +30,12 @@ The optional command if u want to seed some factory data from seeders you can ru
 php artisan db:seed
 ```
 
-#### 4. Optional - Install npm packages
+The optional command if u want to seed some factory data from seeders you can run 
+```bash
+php artisan db:seed
+```
+
+#### 5. Optional - Install npm packages
 
 In case if you want to track realtime changes in project install npm packages
 
@@ -46,7 +51,15 @@ npm install
 php artisan serve
 ```
 
-#### 2. Optional - compile project
+#### 2. Queueing notifications
+
+While notifications are implementing ShouldQueue, to get notification on email you should run
+
+```bash
+php artisan queue:listen
+```
+
+#### 3. Optional - compile project
 
 The project is builded already with command:
 
