@@ -12,6 +12,7 @@ composer install
 ```
 
 #### 2. Environment variables .env
+.env file is already exists in zip project but in case if you want to make it from scratch follow descriptions below and ``!important`` tags as well
 
 In project directory make copy of .env.example file and rename it to .env
 or simply use command:
